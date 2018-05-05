@@ -6,7 +6,7 @@ import subprocess
 import datetime
 
 # Daten holen
-speedtest = subprocess.Popen(["/usr/local/bin/speedtest", "--simple"],
+speedtest = subprocess.Popen(["/usr/bin/speedtest", "--simple"],
                                stdout=subprocess.PIPE,
                                universal_newlines=True
                             )
