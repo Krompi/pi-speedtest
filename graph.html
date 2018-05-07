@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+</head>
+<body>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+
+<?php include('graph.php'); ?>
+
+<script type="text/javascript">
+
+    var ranges = [
+    <?php echo $ranges; ?>
+        ],
+        averages = [
+        <?php echo $averages; ?>
+        ];
+
+
+    Highcharts.chart('container', {
+        chart: {
+            type: 'spline',
+            zoomType: 'x'
+        },
+
+        title: {
+            text: 'Download-Geschwindigkeiten'
+        },
+
+        xAxis: {
+            gridLineWidth: 1,
+            type: 'datetime',
+            labels: {
+                rotation: -45,
+                format: '{value:%Y-%m-%d %H}'
+            }
+        },
+        // xAxis: {
+        //     tickInterval:   24 * 3600 * 1000, // one week
+        //     tickWidth: 0,
+        //     gridLineWidth: 1,
+        //     labels: {
+        //         align: 'left',
+        //         x: 3,
+        //         y: -3
+        //     }
+        // },
+
+        yAxis: {
+            title: {
+                text: null
+            },
+            floor: 0,
+            plotBands: [
+                {
+                    from: 0,
+                    to: 5,
+                    color: 'rgba(255, 157, 0, 1)'
+                },
+                {
+                    from: 5,
+                    to: 10,
+                    color: 'rgba(255, 157, 0, .8)'
+                },{
+                    from: 10,
+                    to: 15,
+                    color: 'rgba(255, 157, 0, .6)'
+                },{
+                    from: 15,
+                    to: 20,
+                    color: 'rgba(255, 157, 0, .4)'
+                },{
+                    from: 20,
+                    to: 22.5,
+                    color: 'rgba(255, 157, 0, .1)'
+                }
+            ]
+        },
+
+        tooltip: {
+            crosshairs: true,
+            shared: true,
+            valueSuffix: 'MB/s'
+        },
+
+        legend: {
+        },
+
+        series: [{
+            name: 'Durchschnitt',
+            data: averages,
+            zIndex: 1,
+            marker: {
+                fillColor: 'white',
+                lineWidth: 2,
+                lineColor: Highcharts.getOptions().colors[0]
+            }
+        }, {
+            name: 'Bereich',
+            data: ranges,
+            type: 'arearange',
+            lineWidth: 0,
+            linkedTo: ':previous',
+            color: Highcharts.getOptions().colors[0],
+            fillOpacity: 0.3,
+            zIndex: 0,
+            marker: {
+                enabled: false
+            }
+        }]
+    });
+</script>
+
+
+</body>
+</html>
