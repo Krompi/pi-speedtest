@@ -1,0 +1,26 @@
+body {
+  background: aliceblue;
+}
+h1, h2{
+  font-family: 'Varela Round', sans-serif;
+}
+
+.last-value {
+  background: darkorange;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.last-value-label {
+  text-align: center;
+}
+.last-value-label-heading {
+  font-family: 'Varela Round', sans-serif;
+  color: #fff;
+  font-size: 1.5em;
+}
+.last-value-label-value {
+  font-family: 'Varela Round', sans-serif;
+  color: #fff;
+  font-size: 3.5em;
+}

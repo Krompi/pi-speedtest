@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Varela+Round" rel="stylesheet">
+    <link href="css/screen.css" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="col-md-12">
+            <h1>DSL-Geschwindigkeit</h1>
+            <h2>Startseite</h2>
+        </div>
+
+        <div class="col-md-4">
+            <div class="last-value" style="height: 20rem;">
+                <div class="last-value-label">
+                    <div class="last-value-label-heading">letzter Wert:</div>
+                    <div class="last-value-label-value"><?php echo $recentValue; ?> MB/s</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div id="container"></div>
+        </div>
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <tbody>
+                <?php foreach ( $table as $attr ) { ?>
+                <tr>
+                    <td style="width: 10px; background: <?php echo $attr["color"]; ?>">&nbsp;</td>
+                    <td><?php echo $attr["date"]; ?></td>
+                    <td><?php echo $attr["down"]; ?>MB/s</td>
+                    <td>
+                        <a href="?date=<?php echo $attr["date"]; ?>"><i class="fas fa-chart-area"></i></a></td>
+                </tr>
+                <?php } ?>
+                </tbody>
+            </table>
+        </div>
+
+
+
+    </div>
+
+<script type="text/javascript">$(document).ready(function() {
+    Highcharts.setOptions({
+        time: {
+            timezoneOffset: -2 * 60
+        }
+    });
+    var options = {
+        chart: {
+            renderTo: 'container',
+            type: 'spline'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime',
+            title: {
+                text: ''
+            },
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            min: 0
+        },
+        tooltip: {
+            // headerFormat: '<b>{series.name}</b><br>',
+            pointFormat: '{point.x:%H:%M}: {point.y:.2f} MB/s'
+        },
+        legend: {
+            enabled: false
+        },
+
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: true
+                }
+            }
+        },
+        exporting: { enabled: false },
+        series: [{
+            name: ""}]
+    };
+
+    var url =  "jsonp.php";
+    $.getJSON(url,  function(data) {
+        options.series[0].data = data;
+        var chart = new Highcharts.Chart(options);
+    });
+});
+
+// $(document).ready(function() {
+//     Highcharts.chart('container', {
+//         chart: {
+//             type: 'spline'
+//         },
+//         title: {
+//             text: 'Snow depth at Vikjafjellet, Norway'
+//         },
+//         subtitle: {
+//             text: 'Irregular time data in Highcharts JS'
+//         },
+//         xAxis: {
+//             type: 'datetime',
+//             dateTimeLabelFormats: { // don't display the dummy year
+//                 month: '%e. %b',
+//                 year: '%b'
+//             },
+//             title: {
+//                 text: 'Date'
+//             }
+//         },
+//         yAxis: {
+//             title: {
+//                 text: 'Snow depth (m)'
+//             },
+//             min: 0
+//         },
+//         tooltip: {
+//             headerFormat: '<b>{series.name}</b><br>',
+//             pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+//         },
+//
+//         plotOptions: {
+//             spline: {
+//                 marker: {
+//                     enabled: true
+//                 }
+//             }
+//         },
+//
+//         colors: ['#6CF', '#39F', '#06C', '#036', '#000'],
+//
+//         // Define the data points. All series have a dummy year
+//         // of 1970/71 in order to be compared on the same x axis. Note
+//         // that in JavaScript, months start at 0 for January, 1 for February etc.
+//         series: [{
+//             name: "Winter 2014-2015",
+//             data: {
+//                 csvURL: 'https://cdn.rawgit.com/highcharts/highcharts/' +
+//                 '057b672172ccc6c08fe7dbb27fc17ebca3f5b770/samples/data/analytics.csv',
+//                 beforeParse: function (csv) {
+//                     return csv.replace(/\n\n/g, '\n');
+//                 }
+//             }
+//             // data: [
+//             //     [Date.UTC(1970, 10, 25), 0],
+//             //     [Date.UTC(1970, 11,  6), 0.25],
+//             //     [Date.UTC(1970, 11, 20), 1.41],
+//             //     [Date.UTC(1970, 11, 25), 1.64],
+//             //     [Date.UTC(1971, 0,  4), 1.6],
+//             //     [Date.UTC(1971, 0, 17), 2.55],
+//             //     [Date.UTC(1971, 0, 24), 2.62],
+//             //     [Date.UTC(1971, 1,  4), 2.5],
+//             //     [Date.UTC(1971, 1, 14), 2.42],
+//             //     [Date.UTC(1971, 2,  6), 2.74],
+//             //     [Date.UTC(1971, 2, 14), 2.62],
+//             //     [Date.UTC(1971, 2, 24), 2.6],
+//             //     [Date.UTC(1971, 3,  1), 2.81],
+//             //     [Date.UTC(1971, 3, 11), 2.63],
+//             //     [Date.UTC(1971, 3, 27), 2.77],
+//             //     [Date.UTC(1971, 4,  4), 2.68],
+//             //     [Date.UTC(1971, 4,  9), 2.56],
+//             //     [Date.UTC(1971, 4, 14), 2.39],
+//             //     [Date.UTC(1971, 4, 19), 2.3],
+//             //     [Date.UTC(1971, 5,  4), 2],
+//             //     [Date.UTC(1971, 5,  9), 1.85],
+//             //     [Date.UTC(1971, 5, 14), 1.49],
+//             //     [Date.UTC(1971, 5, 19), 1.27],
+//             //     [Date.UTC(1971, 5, 24), 0.99],
+//             //     [Date.UTC(1971, 5, 29), 0.67],
+//             //     [Date.UTC(1971, 6,  3), 0.18],
+//             //     [Date.UTC(1971, 6,  4), 0]
+//             // ]
+//         }]
+//     });
+// });
+</script>
+</body>
+</html>

@@ -34,7 +34,6 @@ if ( $parPeriod == "heute" ) {
     $sqlWhere .= " WHERE YEAR(time)='".date("Y")."' AND MONTH(time)='".date("m")."' AND DAY(time)='".date("d")."'";
 }
 $sql = $sql.$sqlWhere.$sqlGroup.$sqlOrder;
-echo $sql;
 
 
 foreach ( $dbh->query( $sql ) as $row ) {

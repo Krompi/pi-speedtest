@@ -1,14 +1,7 @@
 AddType application/x-httpd-php .php .html
+#Options -Indexes
 
 RewriteEngine on
-
-#
-# die Datei liegt im Verzeichnis /abc/def
-# erreichbar ist dieses Verzeichnis aber über /xyz
-# bspw. weil in der httpd.conf folgendes gesetzt wurde:
-# Alias /xyz /abc/def
-#
-
-#RewriteRule ^graph_komplett\.html$ graph.php # macht alle *.html auch als *.htm erreichbar
-
-RewriteRule ^graph-(.*)-(.*)\.html$ graph.html
+RewriteRule css/(.*)$ www/css/$1 [L]
+RewriteRule ^(.*)\.(.*)$ www/index.php?url=$1 [QSA,L]
+RewriteRule ^(.*)$ www/index.php?url=$1 [QSA,L]
