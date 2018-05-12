@@ -7,8 +7,12 @@
  */
 
 
+include('getData.php');
+
+
 // PDO-Verbindung
 $dbh = new PDO('mysql:host=localhost;dbname=speedtest', "speedtest", "speedy");
+$classData = new getData();
 
 
 if ( strstr($_GET["url"], "jsonp") ) {
@@ -25,11 +29,11 @@ if ( strstr($_GET["url"], "jsonp") ) {
 }
 
 
-$recentValue = "";
-$sql = "SELECT * FROM results ORDER BY time DESC LIMIT 1";
-foreach ( $dbh->query( $sql ) as $row ) {
-    $recentValue = number_format($row["down"], 2);
-}
+//$recentValue = "";
+//$sql = "SELECT * FROM results ORDER BY time DESC LIMIT 1";
+//foreach ( $dbh->query( $sql ) as $row ) {
+//    $recentValue = number_format($row["down"], 2);
+//}
 
 $stdSpeed = 25;
 

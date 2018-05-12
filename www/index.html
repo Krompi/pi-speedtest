@@ -32,7 +32,8 @@
             <div class="last-value" style="height: 20rem;">
                 <div class="last-value-label">
                     <div class="last-value-label-heading">letzter Wert:</div>
-                    <div class="last-value-label-value"><?php echo $recentValue; ?> MB/s</div>
+                    <!--<div class="last-value-label-value"><?php echo $recentValue; ?> MB/s</div>-->
+                    <div class="last-value-label-value"><?php echo $classData->getRecent(); ?> MB/s</div>
                 </div>
             </div>
         </div>
