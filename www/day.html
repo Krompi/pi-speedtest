@@ -47,7 +47,8 @@
     new Highcharts.Chart({
         chart: {
             renderTo: 'container',
-            type: 'spline'
+            type: 'spline',
+            zoomType: 'x'
         },
         title: {
             text: ''
@@ -82,9 +83,13 @@
                 }
             }
         },
-        exporting: { enabled: false },
+        // exporting: { enabled: false },
         series: [{
             name: "",
+            lineWidth: 1,
+            marker: {
+                radius: 2
+            },
             data: <?php echo $classData->getValuesJson($start, $ende) ?>
         }]
     });

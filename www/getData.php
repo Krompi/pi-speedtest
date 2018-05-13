@@ -33,10 +33,10 @@ class getData
     }
 
     public function getDays() {
-        $sql = "SELECT time, down 
-                  FROM results 
-              GROUP BY YEAR(time), MONTH(time), DAY(time) 
-              ORDER BY YEAR(time) DESC, MONTH(time) DESC, DAY(time) DESC";
+            $sql = "SELECT time, AVG(down) as down
+                      FROM results 
+                  GROUP BY YEAR(time), MONTH(time), DAY(time) 
+                  ORDER BY YEAR(time) DESC, MONTH(time) DESC, DAY(time) DESC";
         return $this->fetchData($sql, ["down", "date", "date_Ymd", "percentage", "color"]);
     }
 
@@ -77,8 +77,8 @@ class getData
                 if ( $field == "time_s" )     $result[$i][$field] = date("U", strtotime($row["time"]));
                 if ( $field == "date" )       $result[$i][$field] = date("d.m.Y", strtotime($row["time"]));
                 if ( $field == "date_Ymd" )   $result[$i][$field] = date("Y-m-d", strtotime($row["time"]));
-                if ( $field == "down" )       $result[$i][$field] = (double) number_format((double) $row["down"], 2, ".", "");
-                if ( $field == "percentage" ) $result[$i][$field] = (double) number_format((double)$row["down"]*100/$this->maxDSL, 2, ".", "");
+                if ( $field == "down" )       $result[$i][$field] = number_format((double) $row["down"], 2, ",", "");
+                if ( $field == "percentage" ) $result[$i][$field] = number_format((double)$row["down"]*100/$this->maxDSL, 2, ",", "");
                 if ( $field == "color" ) {
                     if ( $row["down"]/$this->maxDSL >= 0.9 ) {
                         $result[$i][$field] = $this->colors[0];
@@ -103,7 +103,7 @@ class getData
         foreach ( $array as $item ) {
             $buffer = [];
             foreach  ($item as $value) {
-                $buffer[] = $value;
+                $buffer[] = (double) $value;
             }
             $result[] = $buffer;
         }
