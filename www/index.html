@@ -28,19 +28,28 @@
             <h2>Startseite</h2>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="last-value" style="height: 20rem;">
                 <div class="last-value-label">
                     <div class="last-value-label-heading">letzter Wert:</div>
-                    <!--<div class="last-value-label-value"><?php echo $recentValue; ?> MB/s</div>-->
                     <div class="last-value-label-value"><?php echo $classData->getRecent(); ?> MB/s</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-6">
+            <div class="last-value" style="height: 20rem; background: cadetblue;">
+                <div class="last-value-label">
+                    <div class="last-value-label-heading">Durchschnitts-Wert:</div>
+                    <div class="last-value-label-value"><?php echo $classData->getAverage(); ?> MB/s</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h3>Übersicht der letzten Werte</h3>
             <div id="container"></div>
         </div>
         <div class="col-md-12">
+            <h3>Übersicht der Tagesdurchschnitte</h3>
             <table class="table table-hover">
                 <tbody>
                 <?php foreach ( $table as $attr ) { ?>
@@ -48,8 +57,10 @@
                     <td style="width: 10px; background: <?php echo $attr["color"]; ?>">&nbsp;</td>
                     <td><?php echo $attr["date"]; ?></td>
                     <td><?php echo $attr["down"]; ?>MB/s</td>
+                    <td>(<?php echo $attr["perc"]; ?>%)</td>
                     <td>
-                        <a href="?date=<?php echo $attr["date"]; ?>"><i class="fas fa-chart-area"></i></a></td>
+                        <a href="?date=<?php echo $attr["date"]; ?>"><i class="fas fa-chart-area"></i></a>
+                    </td>
                 </tr>
                 <?php } ?>
                 </tbody>
