@@ -12,59 +12,14 @@ include('getData.php');
 
 // PDO-Verbindung
 $dbh = new PDO('mysql:host=localhost;dbname=speedtest', "speedtest", "speedy");
-$classData = new getData();
+$classData = new getData(25);
 
-
-if ( strstr($_GET["url"], "jsonp") ) {
-
-//    $array = [];
-//    $sql = "SELECT * FROM results ORDER BY time DESC LIMIT 10";
-//    foreach ( $dbh->query( $sql ) as $row ) {
-//        $dt = new DateTime($row["time"], new DateTimeZone('Europe/Berlin'));
-//        $time = $dt->format('U')*1000;
-//        $array[] = [$time, (double)number_format($row["down"],3)];
-//    }
-    header("content-type: application/json");
-    echo $classData->getLastValuesJson();
-//    echo str_replace("\"", "", json_encode($array));
-    exit;
+$kategorie = substr(basename($_SERVER["REQUEST_URI"]), 0, strpos(basename($_SERVER["REQUEST_URI"]), "."));
+if ( $kategorie == "day" && strtotime($_GET["date"]) ) {
+    $start = date("Y-m-d", strtotime($_GET["date"]))." 00:00:00";
+    $ende  = date("Y-m-d", strtotime($_GET["date"]))." 23:59:59";
+    include('day.html');
+} else {
+    $table = $classData->getDays();
+    include('index.html');
 }
-
-
-//$recentValue = "";
-//$sql = "SELECT * FROM results ORDER BY time DESC LIMIT 1";
-//foreach ( $dbh->query( $sql ) as $row ) {
-//    $recentValue = number_format($row["down"], 2);
-//}
-
-$stdSpeed = 25;
-
-$sql = "SELECT YEAR(time) AS year, MONTH(time) AS month, DAY(time) AS day, time, down FROM results GROUP BY YEAR(time), MONTH(time), DAY(time) ORDER BY YEAR(time) DESC, MONTH(time) DESC, DAY(time) DESC";
-
-$table = [];
-foreach ( $dbh->query( $sql ) as $row ) {
-    $percentage = $row["down"]/$stdSpeed;
-    if ( $percentage >= 0.9 ) {
-        $color = "rgba(62, 255, 0, .5 )";
-    } elseif ( $percentage >= 0.8 ) {
-        $color = "rgba(232, 227, 11, .6 )";
-    } elseif ( $percentage >= 0.6 ) {
-        $color = "rgba(255, 189, 1, .6 )";
-    } elseif ( $percentage >= 0.4 ) {
-        $color = "rgba(232, 113, 11, .7 )";
-    } else {
-        $color = "rgba(255, 40, 12, .8 )";
-    }
-
-    $table[] = [
-        "color" => $color,
-        "down"  => number_format($row["down"], 2, ",", ""),
-        "date"  => date("d.m.Y", strtotime($row["time"])),
-        "perc"  => number_format($percentage*100, "2", ",", "")
-    ];
-}
-
-
-
-
-include('index.html');
